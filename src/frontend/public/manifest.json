@@ -1,0 +1,23 @@
+{
+  "name": "Sara Voice Assistant",
+  "short_name": "Sara",
+  "description": "Sara - Aapki personal voice assistant",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f0a1e",
+  "theme_color": "#7c3aed",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/assets/generated/sara-icon.dim_512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/generated/sara-icon.dim_512x512.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

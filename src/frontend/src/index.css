@@ -60,19 +60,93 @@
   * {
     @apply border-border;
   }
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
   body {
     @apply bg-background text-foreground;
     font-family: "Plus Jakarta Sans", sans-serif;
   }
 }
 
+/* ─── Phone Wallpaper (desktop background behind the phone shell) ──────── */
+.phone-wallpaper {
+  background: radial-gradient(
+      ellipse at 30% 20%,
+      oklch(0.78 0.18 195 / 0.12) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse at 75% 80%,
+      oklch(0.68 0.16 300 / 0.1) 0%,
+      transparent 55%
+    ), oklch(0.08 0.015 265);
+}
+
+/* On actual mobile, the wallpaper IS the shell */
+@media (max-width: 479px) {
+  .phone-wallpaper {
+    padding: 0;
+    align-items: stretch;
+  }
+  .phone-shell {
+    max-width: 100% !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    min-height: 100svh !important;
+    max-height: 100svh !important;
+  }
+}
+
+/* ─── Phone Shell ──────────────────────────────────────────────────────── */
+.phone-shell {
+  background: radial-gradient(
+      ellipse at 20% 10%,
+      oklch(0.78 0.18 195 / 0.07) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 80% 90%,
+      oklch(0.68 0.16 300 / 0.05) 0%,
+      transparent 50%
+    ), oklch(0.11 0.018 265);
+  border-radius: 44px;
+  box-shadow: 0 0 0 1px oklch(0.78 0.18 195 / 0.12), 0 0 0 10px
+    oklch(0.06 0.01 265), 0 0 0 11px oklch(0.3 0.04 265 / 0.4), 0 40px 80px
+    oklch(0 0 0 / 0.7), 0 8px 32px oklch(0.78 0.18 195 / 0.08);
+  /* Side buttons (decorative) */
+}
+
+/* ─── Notch ────────────────────────────────────────────────────────────── */
+.phone-notch {
+  background: oklch(0.06 0.01 265);
+}
+
+/* ─── Status bar ───────────────────────────────────────────────────────── */
+.phone-status-bar {
+  padding-top: 12px;
+}
+
+/* ─── Bottom safe area ──────────────────────────────────────────────────── */
+.pb-safe {
+  padding-bottom: max(env(safe-area-inset-bottom, 0px), 8px);
+}
+
+.phone-bottom {
+  background: oklch(0.13 0.02 265 / 0.95);
+  backdrop-filter: blur(20px);
+}
+
+/* ─── Animations ────────────────────────────────────────────────────────── */
 @keyframes pulse-ring {
   0% {
     transform: scale(1);
     opacity: 0.8;
   }
   100% {
-    transform: scale(1.6);
+    transform: scale(1.7);
     opacity: 0;
   }
 }
@@ -80,10 +154,10 @@
 @keyframes pulse-ring-2 {
   0% {
     transform: scale(1);
-    opacity: 0.6;
+    opacity: 0.5;
   }
   100% {
-    transform: scale(1.9);
+    transform: scale(2.1);
     opacity: 0;
   }
 }
@@ -94,7 +168,7 @@
     height: 4px;
   }
   50% {
-    height: 20px;
+    height: 18px;
   }
 }
 
@@ -104,18 +178,18 @@
     transform: translateY(0px);
   }
   50% {
-    transform: translateY(-8px);
+    transform: translateY(-5px);
   }
 }
 
 @keyframes glow-pulse {
   0%,
   100% {
-    box-shadow: 0 0 20px oklch(0.78 0.18 195 / 0.3), 0 0 40px
+    box-shadow: 0 0 12px oklch(0.78 0.18 195 / 0.35), 0 0 24px
       oklch(0.78 0.18 195 / 0.15);
   }
   50% {
-    box-shadow: 0 0 30px oklch(0.78 0.18 195 / 0.5), 0 0 60px
+    box-shadow: 0 0 20px oklch(0.78 0.18 195 / 0.55), 0 0 40px
       oklch(0.78 0.18 195 / 0.25);
   }
 }
@@ -125,17 +199,16 @@
 }
 
 .listening-ring-1 {
-  animation: pulse-ring 1.5s ease-out infinite;
+  animation: pulse-ring 1.4s ease-out infinite;
 }
 
 .listening-ring-2 {
-  animation: pulse-ring-2 1.5s ease-out infinite 0.4s;
+  animation: pulse-ring-2 1.4s ease-out infinite 0.35s;
 }
 
 .wave-bar {
-  animation: wave-bar 0.8s ease-in-out infinite;
+  animation: wave-bar 0.75s ease-in-out infinite;
 }
-
 .wave-bar:nth-child(1) {
   animation-delay: 0s;
 }
@@ -143,25 +216,20 @@
   animation-delay: 0.15s;
 }
 .wave-bar:nth-child(3) {
-  animation-delay: 0.3s;
+  animation-delay: 0.30s;
 }
 .wave-bar:nth-child(4) {
   animation-delay: 0.45s;
 }
-.wave-bar:nth-child(5) {
-  animation-delay: 0.6s;
-}
 
-.noise-overlay {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-}
-
+/* ─── Glass panel ───────────────────────────────────────────────────────── */
 .glass-panel {
   background: oklch(0.16 0.022 265 / 0.8);
   backdrop-filter: blur(20px);
   border: 1px solid oklch(0.78 0.18 195 / 0.15);
 }
 
+/* ─── Chat Bubbles ───────────────────────────────────────────────────────── */
 .sara-bubble {
   background: linear-gradient(
     135deg,
@@ -174,37 +242,26 @@
 .user-bubble {
   background: linear-gradient(
     135deg,
-    oklch(0.2 0.04 300 / 0.6),
+    oklch(0.22 0.05 300 / 0.7),
     oklch(0.18 0.03 265 / 0.8)
   );
-  border: 1px solid oklch(0.68 0.16 300 / 0.25);
+  border: 1px solid oklch(0.68 0.16 300 / 0.3);
 }
 
-.mesh-bg {
-  background: radial-gradient(
-      ellipse at 20% 20%,
-      oklch(0.78 0.18 195 / 0.08) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      ellipse at 80% 80%,
-      oklch(0.68 0.16 300 / 0.06) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      ellipse at 50% 50%,
-      oklch(0.12 0.025 250 / 1) 0%,
-      oklch(0.08 0.015 265 / 1) 100%
-    );
-}
-
+/* ─── Scrollbar ─────────────────────────────────────────────────────────── */
 .scrollbar-thin::-webkit-scrollbar {
-  width: 4px;
+  width: 3px;
 }
 .scrollbar-thin::-webkit-scrollbar-track {
   background: transparent;
 }
 .scrollbar-thin::-webkit-scrollbar-thumb {
-  background: oklch(0.78 0.18 195 / 0.3);
+  background: oklch(0.78 0.18 195 / 0.25);
   border-radius: 2px;
+}
+.scrollbar-none {
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
 }
