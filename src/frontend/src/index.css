@@ -1,0 +1,210 @@
+@font-face {
+  font-family: "Bricolage Grotesque";
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("/assets/fonts/BricolageGrotesque.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url("/assets/fonts/PlusJakartaSans.woff2") format("woff2");
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0.12 0.018 265;
+    --foreground: 0.93 0.015 220;
+    --card: 0.16 0.022 265;
+    --card-foreground: 0.93 0.015 220;
+    --popover: 0.16 0.022 265;
+    --popover-foreground: 0.93 0.015 220;
+    --primary: 0.78 0.18 195;
+    --primary-foreground: 0.08 0.02 265;
+    --secondary: 0.22 0.03 265;
+    --secondary-foreground: 0.93 0.015 220;
+    --muted: 0.2 0.025 265;
+    --muted-foreground: 0.6 0.04 240;
+    --accent: 0.68 0.16 300;
+    --accent-foreground: 0.08 0.02 265;
+    --destructive: 0.6 0.22 25;
+    --destructive-foreground: 0.95 0.01 0;
+    --border: 0.24 0.03 265;
+    --input: 0.2 0.025 265;
+    --ring: 0.78 0.18 195;
+    --radius: 0.75rem;
+    --chart-1: 0.78 0.18 195;
+    --chart-2: 0.68 0.16 300;
+    --chart-3: 0.72 0.16 150;
+    --chart-4: 0.76 0.18 55;
+    --chart-5: 0.6 0.22 25;
+    --sidebar: 0.14 0.02 265;
+    --sidebar-foreground: 0.93 0.015 220;
+    --sidebar-primary: 0.78 0.18 195;
+    --sidebar-primary-foreground: 0.08 0.02 265;
+    --sidebar-accent: 0.2 0.025 265;
+    --sidebar-accent-foreground: 0.93 0.015 220;
+    --sidebar-border: 0.24 0.03 265;
+    --sidebar-ring: 0.78 0.18 195;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Plus Jakarta Sans", sans-serif;
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-ring-2 {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+
+@keyframes wave-bar {
+  0%,
+  100% {
+    height: 4px;
+  }
+  50% {
+    height: 20px;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 20px oklch(0.78 0.18 195 / 0.3), 0 0 40px
+      oklch(0.78 0.18 195 / 0.15);
+  }
+  50% {
+    box-shadow: 0 0 30px oklch(0.78 0.18 195 / 0.5), 0 0 60px
+      oklch(0.78 0.18 195 / 0.25);
+  }
+}
+
+.sara-avatar-glow {
+  animation: glow-pulse 3s ease-in-out infinite, float 6s ease-in-out infinite;
+}
+
+.listening-ring-1 {
+  animation: pulse-ring 1.5s ease-out infinite;
+}
+
+.listening-ring-2 {
+  animation: pulse-ring-2 1.5s ease-out infinite 0.4s;
+}
+
+.wave-bar {
+  animation: wave-bar 0.8s ease-in-out infinite;
+}
+
+.wave-bar:nth-child(1) {
+  animation-delay: 0s;
+}
+.wave-bar:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.wave-bar:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.wave-bar:nth-child(4) {
+  animation-delay: 0.45s;
+}
+.wave-bar:nth-child(5) {
+  animation-delay: 0.6s;
+}
+
+.noise-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+}
+
+.glass-panel {
+  background: oklch(0.16 0.022 265 / 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid oklch(0.78 0.18 195 / 0.15);
+}
+
+.sara-bubble {
+  background: linear-gradient(
+    135deg,
+    oklch(0.2 0.04 195 / 0.6),
+    oklch(0.18 0.03 265 / 0.8)
+  );
+  border: 1px solid oklch(0.78 0.18 195 / 0.25);
+}
+
+.user-bubble {
+  background: linear-gradient(
+    135deg,
+    oklch(0.2 0.04 300 / 0.6),
+    oklch(0.18 0.03 265 / 0.8)
+  );
+  border: 1px solid oklch(0.68 0.16 300 / 0.25);
+}
+
+.mesh-bg {
+  background: radial-gradient(
+      ellipse at 20% 20%,
+      oklch(0.78 0.18 195 / 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 80% 80%,
+      oklch(0.68 0.16 300 / 0.06) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 50% 50%,
+      oklch(0.12 0.025 250 / 1) 0%,
+      oklch(0.08 0.015 265 / 1) 100%
+    );
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: oklch(0.78 0.18 195 / 0.3);
+  border-radius: 2px;
+}
