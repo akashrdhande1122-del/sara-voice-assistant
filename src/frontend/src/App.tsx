@@ -1,6 +1,7 @@
+import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useSpeech } from "@/hooks/useSpeech";
-import { Mic, MicOff, Sparkles } from "lucide-react";
+import { Bell, Mic, MicOff, Sparkles } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -13,7 +14,54 @@ interface Message {
   timestamp: Date;
 }
 
-const GREETING = "Hello, main Sara hoon. Main aapki kya madad kar sakti hoon?";
+const USER_INFO = {
+  name: "Akash Dhande",
+  family: ["Ma", "Papa", "Bhaiya", "Bhabhi", "Akash (main)"],
+  familyCount: 5,
+};
+
+const GREETING =
+  "Hello Akash bhai! Main Sara hoon. Aapki kya madad kar sakti hoon?";
+
+const JOKES = [
+  "Why don't scientists trust atoms? Because they make up everything!",
+  "Teacher ne pucha: ek aur ek kitna hota hai? Student: Depends on situation sir, ek aur ek gyarah bhi ho sakte hain!",
+  "Why did the scarecrow win an award? Because he was outstanding in his field!",
+  "Ek aadmi doctor ke paas gaya aur bola: Doctor, mujhe lagta hai main invisible hoon. Doctor ne kaha: Abhi mera number nahi hai!",
+  "What do you call a fake noodle? An impasta!",
+  "Pappu ne Google Maps khola aur bola: Wow! Meri colony bhi space se dikti hai!",
+  "Why can't a bicycle stand on its own? Because it's two-tired!",
+  "Santa ji ne fridge kharida, Banta ne pucha: Kyon? Santa: Kyunki andar light jalti hai, bahar nahi!",
+  "I told my wife she was drawing her eyebrows too high. She looked surprised!",
+  "Ek aadmi ped pe chadh gaya, logon ne pucha kya kar rahe ho? Bola: Maine sunha tha upar jakkar dekho, toh main dekh raha hoon!",
+  "Why did the math book look so sad? Because it had too many problems!",
+  "Student to exam paper: I know you. I've seen you in my nightmares!",
+  "Husband: Darling, aaj dinner mein kya banaya? Wife: Google karo!",
+  "What do you call cheese that isn't yours? Nacho cheese!",
+  "Boss ne pucha: Tum late kyun aaye? Employee: Traffic tha. Boss: Tum paidal aate ho!",
+];
+
+const WMO_CODES: Record<number, string> = {
+  0: "clear sky",
+  1: "mainly clear",
+  2: "partly cloudy",
+  3: "overcast",
+  45: "foggy",
+  48: "foggy",
+  51: "light drizzle",
+  53: "drizzle",
+  55: "heavy drizzle",
+  61: "light rain",
+  63: "rain",
+  65: "heavy rain",
+  71: "light snow",
+  73: "snow",
+  75: "heavy snow",
+  80: "rain showers",
+  81: "rain showers",
+  82: "heavy rain showers",
+  95: "thunderstorm",
+};
 
 let msgCounter = 0;
 function nextId() {
@@ -24,6 +72,7 @@ export default function App() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isListening, setIsListening] = useState(false);
   const [isStopped, setIsStopped] = useState(false);
+  const [activeAlarms, setActiveAlarms] = useState(0);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const { speak, cancelSpeak } = useSpeech();
@@ -65,29 +114,122 @@ export default function App() {
         return;
       }
 
-      let response = "";
-
       if (query.includes("hello") || query.includes("hi")) {
-        response = "Hi! Kaise ho aap?";
+        const response = "Hi Akash bhai! Kaise ho aap?";
+        addMessage("sara", response);
+        speak(response);
       } else if (query.includes("time")) {
         const now = new Date();
         const hh = String(now.getHours()).padStart(2, "0");
         const mm = String(now.getMinutes()).padStart(2, "0");
-        response = `Abhi ${hh}:${mm} ho rahe hain.`;
+        const response = `Abhi ${hh}:${mm} ho rahe hain.`;
+        addMessage("sara", response);
+        speak(response);
+      } else if (query.includes("date")) {
+        const dateStr = new Date().toLocaleDateString("en-IN", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+        const response = `Aaj ${dateStr} hai.`;
+        addMessage("sara", response);
+        speak(response);
+      } else if (query.includes("joke")) {
+        const joke = JOKES[Math.floor(Math.random() * JOKES.length)];
+        addMessage("sara", joke);
+        speak(joke);
+      } else if (query.includes("weather")) {
+        if (!navigator.geolocation) {
+          const response = "Aapka browser location support nahi karta.";
+          addMessage("sara", response);
+          speak(response);
+          return;
+        }
+        const loadingMsg = "Location dhundh rahi hoon, ek second...";
+        addMessage("sara", loadingMsg);
+        speak(loadingMsg);
+        navigator.geolocation.getCurrentPosition(
+          async (pos) => {
+            try {
+              const { latitude: lat, longitude: lon } = pos.coords;
+              const res = await fetch(
+                `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`,
+              );
+              const data = await res.json();
+              const temp = data.current_weather.temperature;
+              const code = data.current_weather.weathercode;
+              const desc = WMO_CODES[code] ?? "unknown conditions";
+              const response = `Abhi ${temp}°C hai aur ${desc} hai.`;
+              addMessage("sara", response);
+              speak(response);
+            } catch {
+              const response =
+                "Weather fetch karne mein problem aayi. Internet check karein.";
+              addMessage("sara", response);
+              speak(response);
+            }
+          },
+          () => {
+            const response =
+              "Location access nahi mila. Please allow location.";
+            addMessage("sara", response);
+            speak(response);
+          },
+        );
+      } else if (query.includes("alarm")) {
+        const match = query.match(/(\d+)\s*minute/);
+        if (!match) {
+          const response =
+            "Kitne minute ka alarm lagaun? Boliye 'Sara alarm 5 minutes'.";
+          addMessage("sara", response);
+          speak(response);
+        } else {
+          const minutes = Number.parseInt(match[1], 10);
+          const response = `Theek hai, ${minutes} minute mein alarm bajega.`;
+          addMessage("sara", response);
+          speak(response);
+          setActiveAlarms((prev) => prev + 1);
+          setTimeout(() => {
+            const alarmMsg = `Alarm! ${minutes} minute ho gaye!`;
+            addMessage("sara", alarmMsg);
+            speak(alarmMsg);
+            setActiveAlarms((prev) => Math.max(0, prev - 1));
+          }, minutes * 60000);
+        }
+      } else if (
+        query.includes("naam") ||
+        query.includes("name") ||
+        query.includes("mera naam")
+      ) {
+        const response = `Aapka naam ${USER_INFO.name} hai.`;
+        addMessage("sara", response);
+        speak(response);
+      } else if (
+        query.includes("family") ||
+        query.includes("parivar") ||
+        query.includes("ghar") ||
+        query.includes("meri family")
+      ) {
+        const response = `Aapki family mein ${USER_INFO.familyCount} log hain: Ma, Papa, Bhaiya, Bhabhi, aur aap Akash.`;
+        addMessage("sara", response);
+        speak(response);
+      } else if (query.includes("who am i") || query.includes("kaun hoon")) {
+        const response = `Aap ${USER_INFO.name} hain.`;
+        addMessage("sara", response);
+        speak(response);
       } else if (query.includes("stop")) {
-        response = "Theek hai, bye bye!";
+        const response = "Theek hai, bye bye Akash bhai!";
         addMessage("sara", response);
         speak(response, () => {
           setIsListening(false);
           setIsStopped(true);
         });
-        return;
       } else {
-        response = "Mujhe samajh nahi aaya, please dobara boliye.";
+        const response = "Mujhe samajh nahi aaya, please dobara boliye.";
+        addMessage("sara", response);
+        speak(response);
       }
-
-      addMessage("sara", response);
-      speak(response);
     },
     [addMessage, speak],
   );
@@ -161,7 +303,21 @@ export default function App() {
               AI Assistant
             </span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
+            {activeAlarms > 0 && (
+              <motion.div
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0, opacity: 0 }}
+                className="flex items-center gap-1.5"
+                data-ocid="alarm.panel"
+              >
+                <Bell className="w-4 h-4 text-primary animate-pulse" />
+                <Badge variant="default" className="text-xs px-1.5 py-0 h-5">
+                  {activeAlarms}
+                </Badge>
+              </motion.div>
+            )}
             <div
               className={`w-2 h-2 rounded-full transition-colors duration-500 ${
                 isListening
@@ -214,7 +370,7 @@ export default function App() {
             Sara
           </h1>
           <p className="text-sm text-muted-foreground mt-1 font-sans">
-            Aapki AI Voice Assistant
+            Namaste Akash bhai, main aapki Sara hoon 🙏
           </p>
 
           <AnimatePresence>
@@ -300,7 +456,7 @@ export default function App() {
                             ? "Sara"
                             : msg.role === "error"
                               ? "System"
-                              : "You"}
+                              : "Akash"}
                         </span>
                         <span className="text-xs text-muted-foreground">
                           {formatTime(msg.timestamp)}
@@ -371,9 +527,20 @@ export default function App() {
             Commands
           </p>
           <div className="flex flex-wrap gap-2">
-            {['"Sara hello"', '"Sara time"', '"Sara stop"'].map((cmd) => (
+            {[
+              '"Sara hello"',
+              '"Sara time"',
+              '"Sara date"',
+              '"Sara weather"',
+              '"Sara joke"',
+              '"Sara alarm 5 minutes"',
+              '"Sara mera naam"',
+              '"Sara meri family"',
+              '"Sara stop"',
+            ].map((cmd) => (
               <span
                 key={cmd}
+                data-ocid="sara.command.tab"
                 className="text-xs px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary font-mono"
               >
                 {cmd}
