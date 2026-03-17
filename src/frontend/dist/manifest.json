@@ -9,13 +9,13 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/assets/generated/sara-icon.dim_512x512.png",
+      "src": "/assets/uploads/sara-avatar.dim_200x200-1.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/assets/generated/sara-icon.dim_512x512.png",
+      "src": "/assets/uploads/sara-avatar.dim_200x200-1.png",
       "sizes": "192x192",
       "type": "image/png"
     }
