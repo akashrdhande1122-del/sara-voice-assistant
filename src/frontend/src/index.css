@@ -40,11 +40,6 @@
     --input: 0.2 0.025 265;
     --ring: 0.78 0.18 195;
     --radius: 0.75rem;
-    --chart-1: 0.78 0.18 195;
-    --chart-2: 0.68 0.16 300;
-    --chart-3: 0.72 0.16 150;
-    --chart-4: 0.76 0.18 55;
-    --chart-5: 0.6 0.22 25;
     --sidebar: 0.14 0.02 265;
     --sidebar-foreground: 0.93 0.015 220;
     --sidebar-primary: 0.78 0.18 195;
@@ -63,205 +58,70 @@
   html,
   body,
   #root {
-    height: 100%;
+    height: auto;
+    min-height: 100%;
   }
   body {
-    @apply bg-background text-foreground;
-    font-family: "Plus Jakarta Sans", sans-serif;
+    background-color: #050a0f;
+    color: #00f2ff;
+    font-family: "Courier New", Courier, monospace;
+    overflow-y: auto;
+    min-height: 100vh;
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
-/* ─── Phone Wallpaper (desktop background behind the phone shell) ──────── */
-.phone-wallpaper {
-  background: radial-gradient(
-      ellipse at 30% 20%,
-      oklch(0.78 0.18 195 / 0.12) 0%,
-      transparent 55%
-    ),
-    radial-gradient(
-      ellipse at 75% 80%,
-      oklch(0.68 0.16 300 / 0.1) 0%,
-      transparent 55%
-    ), oklch(0.08 0.015 265);
+/* ─── HUD Colors ─────────────────────────────────────────────── */
+:root {
+  --hud-cyan: #00f2ff;
+  --hud-blue: #0066ff;
+  --hud-dark: #050a0f;
 }
 
-/* On actual mobile, the wallpaper IS the shell */
-@media (max-width: 479px) {
-  .phone-wallpaper {
-    padding: 0;
-    align-items: stretch;
-  }
-  .phone-shell {
-    max-width: 100% !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    min-height: 100svh !important;
-    max-height: 100svh !important;
-  }
+/* ─── HUD Text Glow ─────────────────────────────────────────── */
+.hud-text-glow {
+  text-shadow: 0 0 10px rgba(0, 242, 255, 0.7);
 }
 
-/* ─── Phone Shell ──────────────────────────────────────────────────────── */
-.phone-shell {
-  background: radial-gradient(
-      ellipse at 20% 10%,
-      oklch(0.78 0.18 195 / 0.07) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      ellipse at 80% 90%,
-      oklch(0.68 0.16 300 / 0.05) 0%,
-      transparent 50%
-    ), oklch(0.11 0.018 265);
-  border-radius: 44px;
-  box-shadow: 0 0 0 1px oklch(0.78 0.18 195 / 0.12), 0 0 0 10px
-    oklch(0.06 0.01 265), 0 0 0 11px oklch(0.3 0.04 265 / 0.4), 0 40px 80px
-    oklch(0 0 0 / 0.7), 0 8px 32px oklch(0.78 0.18 195 / 0.08);
-  /* Side buttons (decorative) */
+/* ─── HUD Glass Panel ───────────────────────────────────────── */
+.hud-glass-panel {
+  background: rgba(0, 40, 60, 0.2);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 242, 255, 0.2);
 }
 
-/* ─── Notch ────────────────────────────────────────────────────────────── */
-.phone-notch {
-  background: oklch(0.06 0.01 265);
-}
-
-/* ─── Status bar ───────────────────────────────────────────────────────── */
-.phone-status-bar {
-  padding-top: 12px;
-}
-
-/* ─── Bottom safe area ──────────────────────────────────────────────────── */
-.pb-safe {
-  padding-bottom: max(env(safe-area-inset-bottom, 0px), 8px);
-}
-
-.phone-bottom {
-  background: oklch(0.13 0.02 265 / 0.95);
-  backdrop-filter: blur(20px);
-}
-
-/* ─── Animations ────────────────────────────────────────────────────────── */
-@keyframes pulse-ring {
-  0% {
-    transform: scale(1);
-    opacity: 0.8;
-  }
-  100% {
-    transform: scale(1.7);
-    opacity: 0;
-  }
-}
-
-@keyframes pulse-ring-2 {
-  0% {
-    transform: scale(1);
-    opacity: 0.5;
-  }
-  100% {
-    transform: scale(2.1);
-    opacity: 0;
-  }
-}
-
-@keyframes wave-bar {
-  0%,
-  100% {
-    height: 4px;
-  }
-  50% {
-    height: 18px;
-  }
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
-}
-
-@keyframes glow-pulse {
-  0%,
-  100% {
-    box-shadow: 0 0 12px oklch(0.78 0.18 195 / 0.35), 0 0 24px
-      oklch(0.78 0.18 195 / 0.15);
-  }
-  50% {
-    box-shadow: 0 0 20px oklch(0.78 0.18 195 / 0.55), 0 0 40px
-      oklch(0.78 0.18 195 / 0.25);
-  }
-}
-
-.sara-avatar-glow {
-  animation: glow-pulse 3s ease-in-out infinite, float 6s ease-in-out infinite;
-}
-
-.listening-ring-1 {
-  animation: pulse-ring 1.4s ease-out infinite;
-}
-
-.listening-ring-2 {
-  animation: pulse-ring-2 1.4s ease-out infinite 0.35s;
-}
-
-.wave-bar {
-  animation: wave-bar 0.75s ease-in-out infinite;
-}
-.wave-bar:nth-child(1) {
-  animation-delay: 0s;
-}
-.wave-bar:nth-child(2) {
-  animation-delay: 0.15s;
-}
-.wave-bar:nth-child(3) {
-  animation-delay: 0.30s;
-}
-.wave-bar:nth-child(4) {
-  animation-delay: 0.45s;
-}
-
-/* ─── Glass panel ───────────────────────────────────────────────────────── */
+/* Legacy class kept for compatibility */
 .glass-panel {
-  background: oklch(0.16 0.022 265 / 0.8);
-  backdrop-filter: blur(20px);
-  border: 1px solid oklch(0.78 0.18 195 / 0.15);
+  background: rgba(0, 40, 60, 0.2);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 242, 255, 0.2);
 }
 
-/* ─── Chat Bubbles ───────────────────────────────────────────────────────── */
-.sara-bubble {
+/* ─── Scanline effect ───────────────────────────────────────── */
+.scanline-effect {
+  pointer-events: none;
   background: linear-gradient(
-    135deg,
-    oklch(0.2 0.04 195 / 0.6),
-    oklch(0.18 0.03 265 / 0.8)
+    to bottom,
+    transparent 0%,
+    rgba(0, 242, 255, 0.05) 50%,
+    transparent 100%
   );
-  border: 1px solid oklch(0.78 0.18 195 / 0.25);
+  height: 100px;
+  width: 100%;
+  position: absolute;
+  z-index: 50;
 }
 
-.user-bubble {
-  background: linear-gradient(
-    135deg,
-    oklch(0.22 0.05 300 / 0.7),
-    oklch(0.18 0.03 265 / 0.8)
-  );
-  border: 1px solid oklch(0.68 0.16 300 / 0.3);
-}
-
-/* ─── Scrollbar ─────────────────────────────────────────────────────────── */
-.scrollbar-thin::-webkit-scrollbar {
-  width: 3px;
-}
-.scrollbar-thin::-webkit-scrollbar-track {
-  background: transparent;
-}
-.scrollbar-thin::-webkit-scrollbar-thumb {
-  background: oklch(0.78 0.18 195 / 0.25);
-  border-radius: 2px;
-}
+/* ─── Scrollbar ─────────────────────────────────────────────── */
 .scrollbar-none {
   scrollbar-width: none;
 }
 .scrollbar-none::-webkit-scrollbar {
   display: none;
+}
+
+/* ─── HUD Root ───────────────────────────────────────────────── */
+.hud-root {
+  background-color: #050a0f;
+  color: #00f2ff;
 }

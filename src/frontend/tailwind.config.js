@@ -10,9 +10,7 @@ export default {
     container: {
       center: true,
       padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
+      screens: { "2xl": "1400px" },
     },
     extend: {
       fontFamily: {
@@ -53,23 +51,10 @@ export default {
           DEFAULT: "oklch(var(--card))",
           foreground: "oklch(var(--card-foreground))",
         },
-        chart: {
-          1: "oklch(var(--chart-1))",
-          2: "oklch(var(--chart-2))",
-          3: "oklch(var(--chart-3))",
-          4: "oklch(var(--chart-4))",
-          5: "oklch(var(--chart-5))",
-        },
-        sidebar: {
-          DEFAULT: "oklch(var(--sidebar))",
-          foreground: "oklch(var(--sidebar-foreground))",
-          primary: "oklch(var(--sidebar-primary))",
-          "primary-foreground": "oklch(var(--sidebar-primary-foreground))",
-          accent: "oklch(var(--sidebar-accent))",
-          "accent-foreground": "oklch(var(--sidebar-accent-foreground))",
-          border: "oklch(var(--sidebar-border))",
-          ring: "oklch(var(--sidebar-ring))",
-        },
+        // HUD Colors
+        'hud-cyan': '#00f2ff',
+        'hud-blue': '#0066ff',
+        'hud-dark': '#050a0f',
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -77,9 +62,16 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       boxShadow: {
-        xs: "0 1px 2px 0 rgba(0,0,0,0.05)",
-        "cyan-glow": "0 0 20px oklch(0.78 0.18 195 / 0.3), 0 0 40px oklch(0.78 0.18 195 / 0.15)",
-        "cyan-glow-lg": "0 0 30px oklch(0.78 0.18 195 / 0.5), 0 0 60px oklch(0.78 0.18 195 / 0.25)",
+        "cyan-glow": "0 0 20px rgba(0,242,255,0.3), 0 0 40px rgba(0,242,255,0.15)",
+        "cyan-glow-lg": "0 0 30px rgba(0,242,255,0.5), 0 0 60px rgba(0,242,255,0.25)",
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+        'spin-slow': 'spin 12s linear infinite',
+        'spin-reverse-slow': 'spin-reverse 8s linear infinite',
+        'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+        'scanline': 'scanline 4s linear infinite',
       },
       keyframes: {
         "accordion-down": {
@@ -90,10 +82,18 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-      },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+        'spin-reverse': {
+          from: { transform: 'rotate(360deg)' },
+          to: { transform: 'rotate(0deg)' },
+        },
+        'pulse-glow': {
+          '0%, 100%': { opacity: '0.4', transform: 'scale(1)' },
+          '50%': { opacity: '0.8', transform: 'scale(1.05)' },
+        },
+        'scanline': {
+          '0%': { top: '-10%' },
+          '100%': { top: '110%' },
+        },
       },
     },
   },
